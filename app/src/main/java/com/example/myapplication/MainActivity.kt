@@ -43,17 +43,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
                 super.onDrawerSlide(drawerView, slideOffset)
                 val slideX = drawerView.width * slideOffset
-                content.translationX = slideX
-                content.scaleX = 1 - slideOffset / scaleFactor
-                content.scaleY = 1 - slideOffset / scaleFactor
-                toolbar.translationX = slideX
+//                content.translationX = slideX
+//                content.scaleX = 1 - slideOffset / scaleFactor
+//                content.scaleY = 1 - slideOffset / scaleFactor
+                val ant = TranslateAnimation(0f,slideX,0f,0f)
+                val ans = ScaleAnimation(1f, 1f, // Start and end values for the X axis scaling
+                    1 - slideOffset / scaleFactor, 1 - slideOffset / scaleFactor, // Start and end values for the Y axis scaling
+                    Animation.RELATIVE_TO_SELF, 0.4f, // Pivot point of X scaling
+                    Animation.RELATIVE_TO_SELF, 0.4f)
                 val an = Rotate3dAnimation(0f,-10f,centerX = content.width.toFloat()/2,centerY = content.height.toFloat()/2,depthZ = 20f,reverse = false)
-                val anim = AnimationSet(false)
+                val anim = AnimationSet(true)
                 anim.duration = 500
                 anim.repeatCount = 0
                 anim.isFillEnabled = true
                 anim.fillAfter = true
                 anim.addAnimation(an)
+                anim.addAnimation(ant)
+                anim.addAnimation(ans)
                 content.startAnimation(anim)
                 navView.setBackgroundColor(Color.TRANSPARENT)
             }
