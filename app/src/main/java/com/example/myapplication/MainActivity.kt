@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import androidx.core.view.GravityCompat
@@ -51,7 +52,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     1 - slideOffset / scaleFactor, 1 - slideOffset / scaleFactor, // Start and end values for the Y axis scaling
                     Animation.RELATIVE_TO_SELF, 0.4f, // Pivot point of X scaling
                     Animation.RELATIVE_TO_SELF, 0.4f)
-                val an = Rotate3dAnimation(0f,-10f,centerX = content.width.toFloat()/2,centerY = content.height.toFloat()/2,depthZ = 20f,reverse = false)
+                val an : Animation
+                if(!drawerLayout.isDrawerOpen(drawerView)) {
+                     an = Rotate3dAnimation(
+                        0f,
+                        -10f,
+                        centerX = content.width.toFloat() / 2,
+                        centerY = content.height.toFloat() / 2,
+                        depthZ = 20f,
+                        reverse = false
+                    )
+                    Log.d("","duongtung: onDrawerSlide isDrawerOpen false")
+                }else {
+                     an = Rotate3dAnimation(
+                        -10f,
+                        0f,
+                        centerX = content.width.toFloat() / 2,
+                        centerY = content.height.toFloat() / 2,
+                        depthZ = 0f,
+                        reverse = false
+                    )
+                    Log.d("","duongtung: onDrawerSlide")
+                }
                 val anim = AnimationSet(true)
                 anim.duration = 500
                 anim.repeatCount = 0
@@ -62,17 +84,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 anim.addAnimation(ans)
                 content.startAnimation(anim)
                 navView.setBackgroundColor(Color.TRANSPARENT)
+
             }
 
-            override fun onDrawerClosed(drawerView: View) {
-                super.onDrawerClosed(drawerView)
-                val an = Rotate3dAnimation(-45f,0f,centerX = content.width.toFloat()/2,centerY = content.height.toFloat()/2,depthZ = 0f,reverse = false)
-                an.duration = 500
-                an.repeatCount = 0
-                an.fillAfter = true              // DO NOT keep rotation after animation
-                an.isFillEnabled = true             // Make smooth ending of Animation
-                content.startAnimation(an)
-            }
         }
         drawerLayout.drawerElevation = 0f
         drawerLayout.addDrawerListener(toggle)
